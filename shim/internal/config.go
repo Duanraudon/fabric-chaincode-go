@@ -9,7 +9,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/hyperledger/fabric/bccsp/utils"
+	"github.com/hyperledger/fabric-chaincode-go/shim/utils"
 	"io/ioutil"
 	"os"
 	"strconv"

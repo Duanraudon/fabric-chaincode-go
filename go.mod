@@ -4,7 +4,6 @@ go 1.20
 
 require (
 	github.com/golang/protobuf v1.5.3
-	github.com/hyperledger/fabric v2.1.1+incompatible
 	github.com/hyperledger/fabric-protos-go v0.3.0
 	github.com/tjfoc/gmsm v1.4.1
 	github.com/tjfoc/gmtls v1.2.1
@@ -12,6 +11,7 @@ require (
 )
 
 require (
+	github.com/hyperledger/fabric v2.1.1+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sykesm/zap-logfmt v0.0.4 // indirect
 	go.uber.org/atomic v1.7.0 // indirect

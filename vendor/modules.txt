@@ -8,7 +8,6 @@ github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
 # github.com/hyperledger/fabric v2.1.1+incompatible
 ## explicit
-github.com/hyperledger/fabric/bccsp/utils
 github.com/hyperledger/fabric/common/flogging
 github.com/hyperledger/fabric/common/flogging/fabenc
 # github.com/hyperledger/fabric-protos-go v0.3.0
