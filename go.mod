@@ -4,7 +4,9 @@ go 1.18
 
 require (
 	github.com/golang/protobuf v1.5.3
+	github.com/hyperledger/fabric v2.1.1+incompatible
 	github.com/hyperledger/fabric-protos-go v0.3.0
+	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
 	github.com/tjfoc/gmsm v1.4.1
 	github.com/tjfoc/gmtls v1.2.1
@@ -13,9 +15,7 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/hyperledger/fabric v2.1.1+incompatible // indirect
 	github.com/kr/pretty v0.3.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sykesm/zap-logfmt v0.0.4 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
@@ -32,6 +32,6 @@ require (
 )
 
 replace (
-	github.com/tjfoc/gmsm v1.4.1 => gitea.com/bsn-go-library/gmsm v0.0.0-20230713081945-b2a5598f037d
-	github.com/tjfoc/gmtls v1.2.1 => gitea.com/bsn-go-library/gmtls v0.0.0-20230713082453-06a14c24b2b7
+	github.com/tjfoc/gmsm v1.4.1 => gitea.com/bsn-go-library/gmsm v0.0.0-20230809075355-477db5e34743
+	github.com/tjfoc/gmtls v1.2.1 => gitea.com/bsn-go-library/gmtls v0.0.0-20230809075814-c2a6c3a07fc8
 )

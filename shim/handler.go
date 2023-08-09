@@ -167,8 +167,7 @@ func (h *Handler) handleStubInteraction(handler stubHandlerFunc, msg *pb.Chainco
 func (h *Handler) handleInit(msg *pb.ChaincodeMessage) (*pb.ChaincodeMessage, error) {
 	// Get the function and args from Payload
 	input := &pb.ChaincodeInput{}
-	err := proto.Unmarshal(msg.Payload, input)
-	if err != nil {
+	if err := proto.Unmarshal(msg.Payload, input); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal input: %s", err)
 	}
 
@@ -195,8 +194,8 @@ func (h *Handler) handleInit(msg *pb.ChaincodeMessage) (*pb.ChaincodeMessage, er
 func (h *Handler) handleTransaction(msg *pb.ChaincodeMessage) (*pb.ChaincodeMessage, error) {
 	// Get the function and args from Payload
 	input := &pb.ChaincodeInput{}
-	err := proto.Unmarshal(msg.Payload, input)
-	if err != nil {
+
+	if err := proto.Unmarshal(msg.Payload, input); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal input: %s", err)
 	}
 
@@ -290,8 +289,7 @@ func (h *Handler) handleGetStateMetadata(collection string, key string, channelI
 	if responseMsg.Type == pb.ChaincodeMessage_RESPONSE {
 		// Success response
 		var mdResult pb.StateMetadataResult
-		err := proto.Unmarshal(responseMsg.Payload, &mdResult)
-		if err != nil {
+		if err := proto.Unmarshal(responseMsg.Payload, &mdResult); err != nil {
 			return nil, errors.New("Could not unmarshal metadata response")
 		}
 		metadata := make(map[string][]byte)
@@ -422,8 +420,7 @@ func (h *Handler) handleGetStateByRange(collection, startKey, endKey string, met
 	if responseMsg.Type == pb.ChaincodeMessage_RESPONSE {
 		// Success response
 		rangeQueryResponse := &pb.QueryResponse{}
-		err = proto.Unmarshal(responseMsg.Payload, rangeQueryResponse)
-		if err != nil {
+		if err = proto.Unmarshal(responseMsg.Payload, rangeQueryResponse); err != nil {
 			return nil, fmt.Errorf("[%s] GetStateByRangeResponse unmarshall error", shorttxid(responseMsg.Txid))
 		}
 

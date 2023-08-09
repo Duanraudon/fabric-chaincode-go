@@ -1,7 +1,7 @@
-gitea.com/bsn-go-library/gmsm v0.0.0-20230713081945-b2a5598f037d h1:5M67PrEi0EwZeamDbnsfGnXLDH+l464B2HsVL/dlfnY=
-gitea.com/bsn-go-library/gmsm v0.0.0-20230713081945-b2a5598f037d/go.mod h1:IfsgOqu68/TD7ylLmOEQi5XXS+qkQ7F12jhtlkknHUg=
-gitea.com/bsn-go-library/gmtls v0.0.0-20230713082453-06a14c24b2b7 h1:zZFJw5YH6CevFhzAO4I7+euJrlYttgXHEuXwEBzeAuA=
-gitea.com/bsn-go-library/gmtls v0.0.0-20230713082453-06a14c24b2b7/go.mod h1:zaepTUpox83ZidsswrN/3B7ocje1yDDulqUpY0XShOY=
+gitea.com/bsn-go-library/gmsm v0.0.0-20230809075355-477db5e34743 h1:VMcNsmT34CYqArEw5otB17yHDyO0w50muyKykinZyvA=
+gitea.com/bsn-go-library/gmsm v0.0.0-20230809075355-477db5e34743/go.mod h1:IfsgOqu68/TD7ylLmOEQi5XXS+qkQ7F12jhtlkknHUg=
+gitea.com/bsn-go-library/gmtls v0.0.0-20230809075814-c2a6c3a07fc8 h1:tTHfDfAnkFgV/r7G21OBhYTcxQjDwUwGI85iNc15DPw=
+gitea.com/bsn-go-library/gmtls v0.0.0-20230809075814-c2a6c3a07fc8/go.mod h1:edrqxgzwaK48ryeLH9MKEvNUYNT/35QuOwNR4Ochefw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/benbjohnson/clock v1.1.0 h1:Q92kusRqC1XV2MjkWETPvjJVqKetz1OzxZB7mHJLju8=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=

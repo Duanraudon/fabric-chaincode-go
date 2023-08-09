@@ -5,12 +5,13 @@ package internal
 
 import (
 	"context"
-	//"crypto/tls"
-	tls "github.com/tjfoc/gmtls"
+	"crypto/tls"
 	"time"
 
 	peerpb "github.com/hyperledger/fabric-protos-go/peer"
+	"github.com/tjfoc/gmtls"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
 )
 
@@ -23,7 +24,7 @@ const (
 // NewClientConn ...
 func NewClientConn(
 	address string,
-	tlsConf *tls.Config,
+	tlsConf interface{},
 	kaOpts keepalive.ClientParameters,
 ) (*grpc.ClientConn, error) {
 
@@ -38,9 +39,13 @@ func NewClientConn(
 	}
 
 	if tlsConf != nil {
-		//creds := credentials.NewTLS(tlsConf)
-		creds := tls.NewTLS(tlsConf)
-		dialOpts = append(dialOpts, grpc.WithTransportCredentials(creds))
+		if gmTlsCfg, ok := tlsConf.(*gmtls.Config); ok {
+			creds := gmtls.NewTLS(gmTlsCfg)
+			dialOpts = append(dialOpts, grpc.WithTransportCredentials(creds))
+		} else if tlsCfg, ok := tlsConf.(*tls.Config); ok {
+			creds := credentials.NewTLS(tlsCfg)
+			dialOpts = append(dialOpts, grpc.WithTransportCredentials(creds))
+		}
 	} else {
 		dialOpts = append(dialOpts, grpc.WithInsecure())
 	}

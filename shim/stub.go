@@ -4,10 +4,10 @@
 package shim
 
 import (
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/tjfoc/gmsm/sm3"
 	"os"
 	"unicode/utf8"
 
@@ -39,7 +39,6 @@ type ChaincodeStub struct {
 }
 
 // ChaincodeInvocation functionality
-
 func newChaincodeStub(handler *Handler, channelID, txid string, input *pb.ChaincodeInput, signedProposal *pb.SignedProposal) (*ChaincodeStub, error) {
 	stub := &ChaincodeStub{
 		TxID:                       txid,
@@ -52,14 +51,12 @@ func newChaincodeStub(handler *Handler, channelID, txid string, input *pb.Chainc
 	}
 
 	// TODO: sanity check: verify that every call to init with a nil
-	// signedProposal is a legitimate one, meaning it is an internal call
-	// to system chaincodes.
+	// signedProposal is a legitimate one, meaning it is an internal call to system chaincodes.
 	if signedProposal != nil {
 		var err error
 
 		stub.proposal = &pb.Proposal{}
-		err = proto.Unmarshal(signedProposal.ProposalBytes, stub.proposal)
-		if err != nil {
+		if err = proto.Unmarshal(signedProposal.ProposalBytes, stub.proposal); err != nil {
 
 			return nil, fmt.Errorf("failed to extract Proposal from SignedProposal: %s", err)
 		}
@@ -110,9 +107,8 @@ func newChaincodeStub(handler *Handler, channelID, txid string, input *pb.Chainc
 		// compute the proposal binding from the nonce, creator and epoch
 		epoch := make([]byte, 8)
 		binary.LittleEndian.PutUint64(epoch, chdr.GetEpoch())
-		digest := sm3.Sm3Sum(append(append(shdr.GetNonce(), stub.creator...), epoch...))
+		digest := sha256.Sum256(append(append(shdr.GetNonce(), stub.creator...), epoch...))
 		stub.binding = digest[:]
-
 	}
 
 	return stub, nil
@@ -374,8 +370,7 @@ const (
 
 func createQueryResponseMetadata(metadataBytes []byte) (*pb.QueryResponseMetadata, error) {
 	metadata := &pb.QueryResponseMetadata{}
-	err := proto.Unmarshal(metadataBytes, metadata)
-	if err != nil {
+	if err := proto.Unmarshal(metadataBytes, metadata); err != nil {
 		return nil, err
 	}
 

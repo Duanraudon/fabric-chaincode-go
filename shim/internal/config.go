@@ -4,24 +4,26 @@
 package internal
 
 import (
-	x509 "github.com/tjfoc/gmsm/sm2"
-
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	tls "github.com/tjfoc/gmtls"
+	"github.com/hyperledger/fabric/bccsp/utils"
 	"io/ioutil"
 	"os"
 	"strconv"
 	"time"
 
+	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tjfoc/gmtls"
 	"google.golang.org/grpc/keepalive"
 )
 
 // Config contains chaincode's configuration
 type Config struct {
 	ChaincodeName string
-	TLS           *tls.Config
+	TLS           interface{}
 	KaOpts        keepalive.ClientParameters
 }
 
@@ -88,18 +90,18 @@ func LoadConfig() (Config, error) {
 		return Config{}, fmt.Errorf("failed to read root cert file: %s", err)
 	}
 
-	tlscfg, err := LoadTLSConfig(false, key, cert, root)
+	tlsCfg, err := LoadTLSConfig(false, key, cert, root)
 	if err != nil {
 		return Config{}, err
 	}
-
-	conf.TLS = tlscfg
+	conf.TLS = tlsCfg
 
 	return conf, nil
 }
 
 // LoadTLSConfig loads the TLS configuration for the chaincode
-func LoadTLSConfig(isserver bool, key, cert, root []byte) (*tls.Config, error) {
+// *tls.Config, error
+func LoadTLSConfig(isServer bool, key, cert, root []byte) (interface{}, error) {
 	if key == nil {
 		return nil, fmt.Errorf("key not provided")
 	}
@@ -108,45 +110,82 @@ func LoadTLSConfig(isserver bool, key, cert, root []byte) (*tls.Config, error) {
 		return nil, fmt.Errorf("cert not provided")
 	}
 
-	if !isserver && root == nil {
+	if !isServer && root == nil {
 		return nil, fmt.Errorf("root cert not provided")
 	}
-
-	cccert, err := tls.X509KeyPair(cert, key)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse client key pair: %s", err)
-	}
-
-	var rootCertPool *x509.CertPool
-	if root != nil {
-		rootCertPool = x509.NewCertPool()
-		if ok := rootCertPool.AppendCertsFromPEM(root); !ok {
-			return nil, errors.New("failed to load root cert file")
+	if _, ok := utils.ParseSM2PrivateKey(key); ok {
+		gmCert, err := gmtls.X509KeyPair(cert, key)
+		if err != nil {
+			return nil, err
 		}
-	}
-
-	tlscfg := &tls.Config{
-		MinVersion:   tls.VersionTLS12,
-		Certificates: []tls.Certificate{cccert},
-	}
-
-	//follow Peer's server default config properties
-	if isserver {
-		tlscfg.ClientCAs = rootCertPool
-		tlscfg.SessionTicketsDisabled = true
-		tlscfg.CipherSuites = []uint16{tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
-			tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
-			tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+		var rootCertPool *sm2.CertPool
+		if root != nil {
+			rootCertPool = sm2.NewCertPool()
+			if ok := rootCertPool.AppendCertsFromPEM(root); !ok {
+				return nil, errors.New("failed to load root cert file")
+			}
 		}
-		if rootCertPool != nil {
-			tlscfg.ClientAuth = tls.RequireAndVerifyClientCert
+		tlsCfg := &gmtls.Config{
+			MinVersion:   gmtls.VersionGMSSL,
+			Certificates: []gmtls.Certificate{gmCert},
 		}
+
+		//follow Peer's server default config properties
+		if isServer {
+			tlsCfg.ClientCAs = rootCertPool
+			tlsCfg.SessionTicketsDisabled = true
+			tlsCfg.CipherSuites = []uint16{
+				gmtls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+				gmtls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				gmtls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				gmtls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				gmtls.TLS_RSA_WITH_AES_128_GCM_SHA256,
+				gmtls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			}
+			if rootCertPool != nil {
+				tlsCfg.ClientAuth = gmtls.RequireAndVerifyClientCert
+			}
+		} else {
+			tlsCfg.RootCAs = rootCertPool
+		}
+		return tlsCfg, nil
+	} else if _, ok := utils.ParseECDSAPrivateKey(key); ok {
+		xCert, err := tls.X509KeyPair(cert, key)
+		if err != nil {
+			return nil, err
+		}
+		var rootCertPool *x509.CertPool
+		if root != nil {
+			rootCertPool = x509.NewCertPool()
+			if ok := rootCertPool.AppendCertsFromPEM(root); !ok {
+				return nil, errors.New("failed to load root cert file")
+			}
+		}
+		tlsCfg := &tls.Config{
+			MinVersion:   tls.VersionTLS12,
+			Certificates: []tls.Certificate{xCert},
+		}
+
+		//follow Peer's server default config properties
+		if isServer {
+			tlsCfg.ClientCAs = rootCertPool
+			tlsCfg.SessionTicketsDisabled = true
+			tlsCfg.CipherSuites = []uint16{
+				tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
+				tls.TLS_RSA_WITH_AES_128_GCM_SHA256,
+				tls.TLS_RSA_WITH_AES_256_GCM_SHA384,
+			}
+			if rootCertPool != nil {
+				tlsCfg.ClientAuth = tls.RequireAndVerifyClientCert
+			}
+		} else {
+			tlsCfg.RootCAs = rootCertPool
+		}
+		return tlsCfg, nil
 	} else {
-		tlscfg.RootCAs = rootCertPool
+		return nil, errors.New("private key type conversion error.")
 	}
-
-	return tlscfg, nil
 }

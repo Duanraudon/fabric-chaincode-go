@@ -6,13 +6,13 @@
 package attrmgr
 
 import (
+	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/json"
 	"errors"
 	"fmt"
-	//"crypto/x509"
-	x509 "github.com/tjfoc/gmsm/sm2"
+	"github.com/tjfoc/gmsm/sm2"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/hyperledger/fabric-protos-go/msp"
@@ -101,8 +101,8 @@ func (mgr *Mgr) AddAttributesToCert(attrs *Attributes, cert *x509.Certificate) e
 	return nil
 }
 
-// GetAttributesFromCert gets the attributes from a certificate.
-func (mgr *Mgr) GetAttributesFromCert(cert *x509.Certificate) (*Attributes, error) {
+// GetAttributesFromCert gets the attributes from a certificate. *x509.Certificate
+func (mgr *Mgr) GetAttributesFromCert(cert interface{}) (*Attributes, error) {
 	// Get certificate attributes from the certificate if it exists
 	buf, err := getAttributesFromCert(cert)
 	if err != nil {
@@ -212,13 +212,24 @@ func (a *Attributes) True(name string) error {
 	return nil
 }
 
-// Get the attribute info from a certificate extension, or return nil if not found
-func getAttributesFromCert(cert *x509.Certificate) ([]byte, error) {
-	for _, ext := range cert.Extensions {
-		if isAttrOID(ext.Id) {
-			return ext.Value, nil
+// Get the attribute info from a certificate extension, or return nil if not found, *x509.Certificate
+func getAttributesFromCert(certI interface{}) ([]byte, error) {
+	if gmCert, ok := certI.(*sm2.Certificate); ok {
+		for _, ext := range gmCert.Extensions {
+			if isAttrOID(ext.Id) {
+				return ext.Value, nil
+			}
 		}
+	} else if xCert, ok := certI.(*x509.Certificate); ok {
+		for _, ext := range xCert.Extensions {
+			if isAttrOID(ext.Id) {
+				return ext.Value, nil
+			}
+		}
+	} else {
+		return nil, errors.New("certificate and verify options conversion error.")
 	}
+
 	return nil, nil
 }
 

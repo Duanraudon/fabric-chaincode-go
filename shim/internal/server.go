@@ -4,13 +4,14 @@
 package internal
 
 import (
+	"crypto/tls"
 	"errors"
-	//"crypto/tls"
-	tls "github.com/tjfoc/gmtls"
 	"net"
 	"time"
 
+	"github.com/tjfoc/gmtls"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
 )
 
@@ -51,7 +52,7 @@ func (s *Server) Stop() {
 // listen address
 func NewServer(
 	address string,
-	tlsConf *tls.Config,
+	tlsConf interface{},
 	srvKaOpts *keepalive.ServerParameters,
 ) (*Server, error) {
 	if address == "" {
@@ -78,7 +79,13 @@ func NewServer(
 	}
 
 	if tlsConf != nil {
-		serverOpts = append(serverOpts, grpc.Creds(tls.NewTLS(tlsConf)))
+		if tlsCfg, ok := tlsConf.(*gmtls.Config); ok {
+			serverOpts = append(serverOpts, grpc.Creds(gmtls.NewTLS(tlsCfg)))
+		} else if tlsCfg, ok := tlsConf.(*tls.Config); ok {
+			serverOpts = append(serverOpts, grpc.Creds(credentials.NewTLS(tlsCfg)))
+		} else {
+			return nil, errors.New("tls certificate type conversion error.")
+		}
 	}
 
 	// Default properties follow - let's start simple and stick with defaults for now.

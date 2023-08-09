@@ -11,6 +11,7 @@ github.com/golang/protobuf/ptypes/duration
 github.com/golang/protobuf/ptypes/timestamp
 # github.com/hyperledger/fabric v2.1.1+incompatible
 ## explicit
+github.com/hyperledger/fabric/bccsp/utils
 github.com/hyperledger/fabric/common/flogging
 github.com/hyperledger/fabric/common/flogging/fabenc
 # github.com/hyperledger/fabric-protos-go v0.3.0
@@ -34,12 +35,12 @@ github.com/stretchr/testify/assert
 # github.com/sykesm/zap-logfmt v0.0.4
 ## explicit; go 1.13
 github.com/sykesm/zap-logfmt
-# github.com/tjfoc/gmsm v1.4.1 => gitea.com/bsn-go-library/gmsm v0.0.0-20230713081945-b2a5598f037d
+# github.com/tjfoc/gmsm v1.4.1 => gitea.com/bsn-go-library/gmsm v0.0.0-20230809075355-477db5e34743
 ## explicit; go 1.18
 github.com/tjfoc/gmsm/sm2
 github.com/tjfoc/gmsm/sm3
 github.com/tjfoc/gmsm/sm4
-# github.com/tjfoc/gmtls v1.2.1 => gitea.com/bsn-go-library/gmtls v0.0.0-20230713082453-06a14c24b2b7
+# github.com/tjfoc/gmtls v1.2.1 => gitea.com/bsn-go-library/gmtls v0.0.0-20230809075814-c2a6c3a07fc8
 ## explicit; go 1.18
 github.com/tjfoc/gmtls
 # go.uber.org/atomic v1.7.0
