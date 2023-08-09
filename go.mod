@@ -4,7 +4,6 @@ go 1.18
 
 require (
 	github.com/golang/protobuf v1.5.3
-	github.com/hyperledger/fabric v2.1.1+incompatible
 	github.com/hyperledger/fabric-protos-go v0.3.0
 	github.com/pkg/errors v0.9.1
 	github.com/stretchr/testify v1.8.4
@@ -15,6 +14,7 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/hyperledger/fabric v2.1.1+incompatible // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sykesm/zap-logfmt v0.0.4 // indirect
