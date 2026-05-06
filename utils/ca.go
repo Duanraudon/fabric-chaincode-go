@@ -9,6 +9,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"github.com/tjfoc/gmsm/sm2"
+	x509sm2 "github.com/tjfoc/gmsm/x509"
 	"strings"
 )
 
@@ -60,7 +61,7 @@ func parsePrivateKey(der []byte) (crypto.PrivateKey, error) {
 			return nil, errors.New("tls: found unknown private key type in PKCS#8 wrapping")
 		}
 	}
-	if key, err := sm2.ParsePKCS8UnecryptedPrivateKey(der); err == nil {
+	if key, err := x509sm2.ParsePKCS8UnecryptedPrivateKey(der); err == nil {
 		return key, nil
 	}
 	return nil, errors.New("tls: failed to parse private key")

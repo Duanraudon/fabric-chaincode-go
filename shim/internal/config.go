@@ -10,8 +10,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/hyperledger/fabric-chaincode-go/utils"
-	"github.com/tjfoc/gmsm/sm2"
-	"github.com/tjfoc/gmtls"
+	"github.com/tjfoc/gmsm/gmtls"
+	x509sm2 "github.com/tjfoc/gmsm/x509"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -119,9 +119,9 @@ func LoadTLSConfig(isServer bool, key, cert, root []byte) (interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		var rootCertPool *sm2.CertPool
+		var rootCertPool *x509sm2.CertPool
 		if root != nil {
-			rootCertPool = sm2.NewCertPool()
+			rootCertPool = x509sm2.NewCertPool()
 			if ok := rootCertPool.AppendCertsFromPEM(root); !ok {
 				return nil, errors.New("failed to load root cert file")
 			}
