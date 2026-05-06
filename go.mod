@@ -7,7 +7,6 @@ require (
 	github.com/hyperledger/fabric-protos-go v0.0.0-20220613214546-bf864f01d75e
 	github.com/stretchr/testify v1.8.0
 	github.com/tjfoc/gmsm v1.4.1
-	github.com/tjfoc/gmtls v1.2.1
 	google.golang.org/grpc v1.48.0
 )
 
@@ -23,9 +22,4 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace (
-	//github.com/tjfoc/gmsm v1.4.1 => gitea.com/tjfoc/gmsm v1.1.3
-	//github.com/tjfoc/gmtls v1.2.1 => gitea.com/tjfoc/gmtls v1.2.4
-	github.com/tjfoc/gmsm v1.4.1 => github.com/chenxifun/gmsm v1.4.0
-	github.com/tjfoc/gmtls v1.2.1 => github.com/chenxifun/gmtls v1.2.1-0.20210427064604-124283070ca7
-)
+replace github.com/tjfoc/gmsm v1.4.1 => github.com/chenxifun/gmsm v1.4.0

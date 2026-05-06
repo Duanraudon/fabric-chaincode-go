@@ -6,7 +6,8 @@ package internal
 import (
 	"crypto/tls"
 	"errors"
-	"github.com/tjfoc/gmtls"
+	"github.com/tjfoc/gmsm/gmtls"
+	"github.com/tjfoc/gmsm/gmtls/gmcredentials"
 	"google.golang.org/grpc/keepalive"
 	"net"
 	"time"
@@ -80,7 +81,7 @@ func NewServer(
 
 	if tlsConf != nil {
 		if tlsCfg, ok := tlsConf.(*gmtls.Config); ok {
-			serverOpts = append(serverOpts, grpc.Creds(gmtls.NewTLS(tlsCfg)))
+			serverOpts = append(serverOpts, grpc.Creds(gmcredentials.NewTLS(tlsCfg)))
 		} else if tlsCfg, ok := tlsConf.(*tls.Config); ok {
 			serverOpts = append(serverOpts, grpc.Creds(credentials.NewTLS(tlsCfg)))
 		} else {

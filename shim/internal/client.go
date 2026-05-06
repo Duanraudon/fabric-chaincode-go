@@ -6,10 +6,11 @@ package internal
 import (
 	"context"
 	"crypto/tls"
+	"github.com/tjfoc/gmsm/gmtls"
+	"github.com/tjfoc/gmsm/gmtls/gmcredentials"
 	"time"
 
 	peerpb "github.com/hyperledger/fabric-protos-go/peer"
-	"github.com/tjfoc/gmtls"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/keepalive"
@@ -40,7 +41,7 @@ func NewClientConn(
 
 	if tlsConf != nil {
 		if gmTlsCfg, ok := tlsConf.(*gmtls.Config); ok {
-			creds := gmtls.NewTLS(gmTlsCfg)
+			creds := gmcredentials.NewTLS(gmTlsCfg)
 			dialOpts = append(dialOpts, grpc.WithTransportCredentials(creds))
 		} else if tlsCfg, ok := tlsConf.(*tls.Config); ok {
 			creds := credentials.NewTLS(tlsCfg)
