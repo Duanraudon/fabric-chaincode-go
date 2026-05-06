@@ -2,7 +2,7 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 gitea.com/tjfoc/gmsm v1.1.3 h1:B3fPntvErQ6wHvIkZHWGs+AH9YjvDQ9hE5cqgHioZ4s=
 gitea.com/tjfoc/gmsm v1.1.3/go.mod h1:wIM46xYjbv2UK2TKJFm1aQhi3cgMph1TEE1OxMn9dIA=
-gitea.com/tjfoc/gmtls v1.2.4 h1:1jjTnBNFMgkUE2BPb6lOuOajnbPLD+zMcdne6W9l+Lw=
+gitea.com/tjfoc/gmtls v1.2.4 h1:RjAr1bN5+AN113rJ5n2zNDYzg2jQba8LtL+b5noOocc=
 gitea.com/tjfoc/gmtls v1.2.4/go.mod h1:C2OycB7QXhk/i8vgknn9uSc47ISdyXisnXZirLvpkGg=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
