@@ -23,5 +23,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/tjfoc/gmtls v1.2.1 => gitea.com/tjfoc/gmtls v1.2.2
-replace github.com/tjfoc/gmsm v1.4.1 => gitea.com/tjfoc/gmsm v1.1.2
+replace github.com/tjfoc/gmtls v1.2.1 => gitea.com/tjfoc/gmtls v1.2.3
+
+replace github.com/tjfoc/gmsm v1.4.1 => gitea.com/tjfoc/gmsm v1.1.3
